@@ -1,0 +1,4 @@
+MVC:
+    m: model
+    v : view // html 
+    c : controller
