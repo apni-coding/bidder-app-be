@@ -11,7 +11,7 @@ app.use(cors());
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, async () => {
   try {
-    console.log("App is running on 30001");
+    console.log(`App is running on ${PORT}`);
     // db connection
     await sequelize.authenticate();
     console.log('Db Connection has been established successfully.');
@@ -19,3 +19,4 @@ app.listen(PORT, async () => {
     console.log("Error", error.message);
   }
 });
+

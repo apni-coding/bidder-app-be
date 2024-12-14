@@ -1,1 +1,0 @@
-// using sequelize model 
