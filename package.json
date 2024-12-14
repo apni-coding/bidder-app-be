@@ -4,7 +4,9 @@
   "description": "develop",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:dev": "cross-env NODE_ENV=development node app.js",
+    "start:stage": "cross-env NODE_ENV=staging node app.js",
+    "start:prod": "cross-env NODE_ENV=production node app.js"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +17,8 @@
     "express": "^4.21.2",
     "mysql2": "^3.11.5",
     "sequelize": "^6.37.5"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
