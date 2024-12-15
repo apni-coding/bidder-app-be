@@ -5,4 +5,5 @@ exports.ERROR_MESSAGE = {
 
 exports.SUCCESS_MESSAGE = {
   DATA_FETCH_SUCCESSFULLY: "Data fetch successfully",
+  USER_CREATED: "User created successfully"
 };

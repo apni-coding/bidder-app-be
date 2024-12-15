@@ -4,9 +4,9 @@
   "description": "develop",
   "main": "index.js",
   "scripts": {
-    "start:dev": "cross-env NODE_ENV=development node app.js",
-    "start:stage": "cross-env NODE_ENV=staging node app.js",
-    "start:prod": "cross-env NODE_ENV=production node app.js"
+    "start:dev": "cross-env NODE_ENV=development nodemon app.js",
+    "start:stage": "cross-env NODE_ENV=staging nodemon app.js",
+    "start:prod": "cross-env NODE_ENV=production nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mysql2": "^3.11.5",
+    "nodemon": "^3.1.9",
     "sequelize": "^6.37.5"
   },
   "devDependencies": {
