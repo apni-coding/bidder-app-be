@@ -1,20 +1,26 @@
 const authService = require("../../service/auth/authService");
+const {
+  SUCCESS_MESSAGE,
+  ERROR_MESSAGE,
+} = require("../../utils/propertyResolver");
+const {
+  sendSuccessResponse,
+  sendErrorResponse,
+} = require("../../utils/response");
 
 const registerUser = async (req, res) => {
   try {
-    console.log(req.body);
     const userInfo = await authService.saveUser(req.body);
-    res.send(userInfo);
+
+    sendSuccessResponse(res, SUCCESS_MESSAGE.USER_CREATED, userInfo, 200);
   } catch (error) {
-    res.send(error.message);
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      "",
+      500
+    );
   }
 };
 
 module.exports = { registerUser };
-
-// {
-//     first_name: 'vivek',
-//     last_name: 'verma',
-//     email: 'email@gmail.com',
-//     password: 'Admin@123'
-// }

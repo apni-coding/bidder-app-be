@@ -6,4 +6,4 @@ authRouter.post("/register", authController.registerUser);
 
 module.exports = authRouter;
 
-// localhost:3001/api/auth/register ---> post method
+//http://localhost:3001/api/auth/register ---> post method
