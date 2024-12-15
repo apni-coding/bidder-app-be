@@ -4,11 +4,12 @@ const cors = require("cors");
 const sequelize = require("./src/config/dbConnect");
 const Roles = require("./src/models/role");
 const Users = require("./src/models/user");
+const indexRouter = require("./src/routes");
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-
+app.use('/api', indexRouter)
 // server listen
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, async () => {
