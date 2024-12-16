@@ -33,7 +33,7 @@ const Users = sequelize.define(
       type: DataTypes.STRING,
     },
     verify_account_expires: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
     },
     reset_password_token: {
       type: DataTypes.STRING,
@@ -63,6 +63,11 @@ const Users = sequelize.define(
     deleted_by: {
       type: DataTypes.INTEGER
     },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true,   // Allow updated_at to be null
+      defaultValue: null, // Set default to null
+    }
   },
   {
     tableName: 'user',
@@ -71,11 +76,11 @@ const Users = sequelize.define(
     createdAt: "created_at",
     updatedAt: "updated_at",
     deletedAt: 'deleted_at',
-    // hooks: {
-    //   beforeCreate:(user)=>{
-    //     user.updated_at = null // explicity set updated_at to null
-    //   }
-    // }
+    hooks: {
+      beforeCreate:(user)=>{
+        user.updated_at = null // explicity set updated_at to null
+      }
+    }
   }
 );
 
