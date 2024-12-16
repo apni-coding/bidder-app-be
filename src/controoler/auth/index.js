@@ -7,10 +7,17 @@ const {
   sendSuccessResponse,
   sendErrorResponse,
 } = require("../../utils/response");
+const bcrypt = require("bcrypt");
 
 const registerUser = async (req, res) => {
   try {
-    const userInfo = await authService.saveUser(req.body);
+    const { password } = req.body;
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const userInfo = await authService.saveUser({
+      ...req.body,
+      password: hashPassword,
+    });
 
     sendSuccessResponse(res, SUCCESS_MESSAGE.USER_CREATED, userInfo, 200);
   } catch (error) {
