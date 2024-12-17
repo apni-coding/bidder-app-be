@@ -1,22 +1,4 @@
-const Users = require("../../models/user");
-const { ERROR_MESSAGE } = require("../../utils/propertyResolver");
-const sendMail = require("../mail/mailService");
-
-const saveUser = async (userDetails) => {
-  try {
-    const { email, role_id, verify_account_token, first_name } = userDetails;
-    if(role_id == 1){
-      throw new Error(ERROR_MESSAGE.UNAUTHORIZED_USER);
-    }
-    const isEmailPresent = await Users.findOne({ where: { email} });
-    if (isEmailPresent) {
-      throw new Error(ERROR_MESSAGE.EMAIL_ALREADY_EXIST);
-    }
-    const result = await Users.create(userDetails); // insert query
-
-    const verifyAccountUrl =`/account-verify?token=${verify_account_token}`; // front url
-    const contentHtml = `
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -125,25 +107,16 @@ const saveUser = async (userDetails) => {
     </div>
 
     <div class="email-body">
-      <p>Hello ${first_name},</p>
+      <p>Hello [User's Name],</p>
       <p>Thank you for registering with us! To complete your account setup, please click the button below to verify your email address:</p>
-      <a href=${verifyAccountUrl} class="verification-button">Verify My Email</a>
+      <a href="[Verification Link]" class="verification-button">Verify My Email</a>
     </div>
 
     <div class="email-footer">
       <p>If you did not create an account, no further action is required.</p>
-      <p>For any questions, feel free to <a href="mailto:idealtechguru1@gmail.com">contact us</a>.</p>
+      <p>For any questions, feel free to <a href="mailto:support@example.com">contact us</a>.</p>
     </div>
   </div>
+
 </body>
 </html>
-    `
-    await sendMail(email, "Welcome to Bidder App", contentHtml )
-    return result;
-  } catch (error) {
-    console.log(error.message)
-    throw new Error(error.message);
-  }
-};
-
-module.exports = { saveUser };
