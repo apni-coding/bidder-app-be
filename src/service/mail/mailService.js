@@ -19,18 +19,15 @@ const sendMail = async (userEmail, mailSubject, content) => {
     from: "idealtechguru1@gmail.com",
     to: userEmail,
     subject: mailSubject,
-    // html: content,
-    text: content,
+    html: content,
   };
 
   //3. Send Mail
   try {
     const result = await transporter.sendMail(mailOption);
-    console.log(result);
     return result;
   } catch (error) {
-    console.log(error.message);
-    // throw new Error(error.message);
+    throw new Error(error.message);
   }
 };
 
