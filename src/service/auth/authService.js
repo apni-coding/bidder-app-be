@@ -5,16 +5,16 @@ const sendMail = require("../mail/mailService");
 const saveUser = async (userDetails) => {
   try {
     const { email, role_id, verify_account_token, first_name } = userDetails;
-    if(role_id == 1){
+    if (role_id == 1) {
       throw new Error(ERROR_MESSAGE.UNAUTHORIZED_USER);
     }
-    const isEmailPresent = await Users.findOne({ where: { email} });
+    const isEmailPresent = await Users.findOne({ where: { email } });
     if (isEmailPresent) {
       throw new Error(ERROR_MESSAGE.EMAIL_ALREADY_EXIST);
     }
     const result = await Users.create(userDetails); // insert query
 
-    const verifyAccountUrl =`/account-verify?token=${verify_account_token}`; // front url
+    const verifyAccountUrl = `/account-verify?token=${verify_account_token}`; // front url
     const contentHtml = `
     <!DOCTYPE html>
 <html lang="en">
@@ -137,13 +137,52 @@ const saveUser = async (userDetails) => {
   </div>
 </body>
 </html>
-    `
-    await sendMail(email, "Welcome to Bidder App", contentHtml )
+    `;
+    await sendMail(email, "Welcome to Bidder App", contentHtml);
     return result;
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     throw new Error(error.message);
   }
 };
 
-module.exports = { saveUser };
+const verifyAccountDetail = async (token) => {
+  try {
+    // find the use with the provided token
+    const user = await Users.findOne({
+      where: {
+        verify_account_token: token,
+      },
+    });
+
+    if (!user) {
+      throw new Error(ERROR_MESSAGE.INVALID_TOKEN);
+    }
+
+    // Check if the token has expired
+    const currentTime = new Date(); // Get the current time
+    const expirationTime = user.verify_account_expires;
+
+    // Format currentTime as ISO string
+    const formattedCurrentTime = currentTime
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+
+    if (formattedCurrentTime > expirationTime) {
+      throw new Error(ERROR_MESSAGE.INVALID_TOKEN);
+    }
+
+    // If valid token, update the user details
+    await user.update({
+      is_active: true,
+      verify_account_token: null,
+      verify_account_expires: null,
+    });
+    return user.id;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+module.exports = { saveUser, verifyAccountDetail };
