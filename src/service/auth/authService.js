@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Users = require("../../models/user");
 const { ERROR_MESSAGE } = require("../../utils/propertyResolver");
 const sendMail = require("../mail/mailService");
@@ -235,14 +236,13 @@ const loginUser = async (email, password, remember_password) => {
 
 const forgotPassword = async (email, token, tokenExpiryTime) => {
   try {
-    
     // Find user by email
-    const user = await Users.findOne({where:{email}});
+    const user = await Users.findOne({ where: { email } });
 
     // Check if user not avb
-    if(!user){
+    if (!user) {
       throw new Error(ERROR_MESSAGE.USER_NOT_FOUND);
-    };
+    }
 
     // token update in db
     await user.update({
@@ -375,9 +375,56 @@ const forgotPassword = async (email, token, tokenExpiryTime) => {
 </html>
     `;
     await sendMail(email, "Update Password", contentHtml);
-    return user.id
+    return user.id;
   } catch (error) {
     throw new Error(error.message);
   }
 };
-module.exports = { saveUser, verifyAccountDetail, loginUser, forgotPassword };
+
+const resetUserPassword = async (token, password) => {
+  try {
+    //step:1: Find the user details with provided token and ensure token is not expired
+    const user = await Users.findOne({
+      where: {
+        verify_account_token: token,
+        verify_account_expires: {
+          [Op.gt]: Date.now(),
+        },
+      },
+    });
+
+    // step:2: If no user is found or the token invalid/expired
+    if (!user) {
+      throw new Error(ERROR_MESSAGE.INVALID_TOKEN);
+    }
+
+    // step:3: Encrypt the new password
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
+    // step:4: Update the user's information in db
+    const updatedUserInfo = await Users.update(
+      {
+        password: encryptedPassword,
+        verify_account_token: null,
+        verify_account_expires: null,
+        is_active: true,
+        updated_by: user.id,
+      },
+      {
+        where: {
+          email: user.email,
+        },
+      }
+    );
+    return user.id;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+module.exports = {
+  saveUser,
+  verifyAccountDetail,
+  loginUser,
+  forgotPassword,
+  resetUserPassword,
+};

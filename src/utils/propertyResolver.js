@@ -5,7 +5,7 @@ exports.ERROR_MESSAGE = {
   INVALID_TOKEN: "Invalid or expired verification token.",
   INVALID_EMAIL_PASSWORD: "Invalid email or password",
   USER_NOT_ACTIVE: "Your account is not active",
-  USER_NOT_FOUND: "User not found"
+  USER_NOT_FOUND: "User not found",
 };
 
 exports.SUCCESS_MESSAGE = {
@@ -13,5 +13,6 @@ exports.SUCCESS_MESSAGE = {
   USER_CREATED: "User created successfully",
   ACCOUNT_VERIFIED: "Account verified successfully",
   USER_LOGIN: "User successfully login",
-  FORGOT_EMAIL_SEND: "Send a email for update password"
+  FORGOT_EMAIL_SEND: "Send a email for update password",
+  PASSWORD_UPDATED: "Password updated successfully",
 };
