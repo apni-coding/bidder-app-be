@@ -80,7 +80,11 @@ const forgotPassword = async (req, res) => {
     const token = uuidv4();
     const tokenExpiryTime = Date.now() + 3600000; // token valid for 1 hour
 
-    const result = await authService.forgotPassword(req.body.email, token, tokenExpiryTime );
+    const result = await authService.forgotPassword(
+      req.body.email,
+      token,
+      tokenExpiryTime
+    );
 
     sendSuccessResponse(res, SUCCESS_MESSAGE.FORGOT_EMAIL_SEND, result, 200);
   } catch (error) {
@@ -93,4 +97,31 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, verifyAccount, loginUser, forgotPassword };
+const updatePassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+    if (!token) {
+      throw new Error(ERROR_MESSAGE.INVALID_TOKEN);
+    }
+    
+    const result = await authService.resetUserPassword(token, password);
+
+    sendSuccessResponse(res, SUCCESS_MESSAGE.FORGOT_EMAIL_SEND, result, 200);
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      "",
+      500
+    );
+  }
+};
+
+module.exports = {
+  registerUser,
+  verifyAccount,
+  loginUser,
+  forgotPassword,
+  updatePassword,
+};

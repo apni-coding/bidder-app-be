@@ -380,4 +380,12 @@ const forgotPassword = async (email, token, tokenExpiryTime) => {
     throw new Error(error.message);
   }
 };
-module.exports = { saveUser, verifyAccountDetail, loginUser, forgotPassword };
+
+const resetUserPassword = async(token, password)=>{
+  try {
+    
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+module.exports = { saveUser, verifyAccountDetail, loginUser, forgotPassword, resetUserPassword };
