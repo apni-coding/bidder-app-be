@@ -200,6 +200,10 @@ const loginUser = async (email, password, remember_password) => {
       throw new Error(ERROR_MESSAGE.INVALID_EMAIL_PASSWORD);
     }
 
+    // If user is not verified 
+    if(!user.is_active){
+      throw new Error(ERROR_MESSAGE.USER_NOT_ACTIVE)
+    }
     // Compare the provided password with the hashed password
     const isMatchPassword = await bcrypt.compare(password, user.password);
 
