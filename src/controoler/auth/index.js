@@ -74,4 +74,23 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, verifyAccount, loginUser };
+const forgotPassword = async (req, res) => {
+  try {
+    //Generate Token
+    const token = uuidv4();
+    const tokenExpiryTime = Date.now() + 3600000; // token valid for 1 hour
+
+    const result = await authService.forgotPassword(req.body.email, token, tokenExpiryTime );
+
+    sendSuccessResponse(res, SUCCESS_MESSAGE.FORGOT_EMAIL_SEND, result, 200);
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      "",
+      500
+    );
+  }
+};
+
+module.exports = { registerUser, verifyAccount, loginUser, forgotPassword };

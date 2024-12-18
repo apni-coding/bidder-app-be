@@ -35,9 +35,9 @@ const Users = sequelize.define(
     verify_account_expires: {
       type: DataTypes.DATE,
     },
-    reset_password_token: {
-      type: DataTypes.STRING,
-    },
+    // reset_password_token: {
+    //   type: DataTypes.STRING,
+    // },
     role_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
