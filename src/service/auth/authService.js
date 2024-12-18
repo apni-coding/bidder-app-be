@@ -1,6 +1,11 @@
 const Users = require("../../models/user");
 const { ERROR_MESSAGE } = require("../../utils/propertyResolver");
 const sendMail = require("../mail/mailService");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV || "development"}`,
+});
 
 const saveUser = async (userDetails) => {
   try {
@@ -185,4 +190,43 @@ const verifyAccountDetail = async (token) => {
   }
 };
 
-module.exports = { saveUser, verifyAccountDetail };
+const loginUser = async (email, password, remember_password) => {
+  try {
+    // Find user by email
+    const user = await Users.findOne({ where: { email } });
+
+    // Check if user exists
+    if (!user) {
+      throw new Error(ERROR_MESSAGE.INVALID_EMAIL_PASSWORD);
+    }
+
+    // Compare the provided password with the hashed password
+    const isMatchPassword = await bcrypt.compare(password, user.password);
+
+    // If password don't match
+    if (!isMatchPassword) {
+      throw new Error(ERROR_MESSAGE.INVALID_EMAIL_PASSWORD);
+    }
+
+    // Generate jwt token
+    const tokenExpiry = remember_password ? "7d" : "24h";
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        role_id: user.role_id,
+        user_status: user.is_active,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: tokenExpiry,
+      }
+    );
+
+    return token;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+module.exports = { saveUser, verifyAccountDetail, loginUser };

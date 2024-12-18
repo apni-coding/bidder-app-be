@@ -43,7 +43,7 @@ const verifyAccount = async (req, res) => {
     if (!token) {
       throw new Error(ERROR_MESSAGE.INVALID_TOKEN);
     }
-    const result =await authService.verifyAccountDetail(token);
+    const result = await authService.verifyAccountDetail(token);
     sendSuccessResponse(res, SUCCESS_MESSAGE.ACCOUNT_VERIFIED, result, 200);
   } catch (error) {
     sendErrorResponse(
@@ -55,4 +55,23 @@ const verifyAccount = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, verifyAccount };
+const loginUser = async (req, res) => {
+  try {
+    const { email, password, remember_password } = req.body;
+    const result = await authService.loginUser(
+      email,
+      password,
+      remember_password
+    );
+    sendSuccessResponse(res, SUCCESS_MESSAGE.USER_LOGIN, result, 200);
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      "",
+      500
+    );
+  }
+};
+
+module.exports = { registerUser, verifyAccount, loginUser };

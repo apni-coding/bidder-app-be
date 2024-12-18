@@ -6,6 +6,7 @@ const authRouter = express.Router();
 
 authRouter.post("/register", validateSchema(registerSchema), authController.registerUser);
 authRouter.get("/verify-account/:token", authController.verifyAccount);
+authRouter.post("/login", authController.loginUser);
 
 module.exports = authRouter;
 
