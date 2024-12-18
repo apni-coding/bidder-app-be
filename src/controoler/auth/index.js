@@ -104,10 +104,10 @@ const updatePassword = async (req, res) => {
     if (!token) {
       throw new Error(ERROR_MESSAGE.INVALID_TOKEN);
     }
-    
+
     const result = await authService.resetUserPassword(token, password);
 
-    sendSuccessResponse(res, SUCCESS_MESSAGE.FORGOT_EMAIL_SEND, result, 200);
+    sendSuccessResponse(res, SUCCESS_MESSAGE.PASSWORD_UPDATED, result, 200);
   } catch (error) {
     sendErrorResponse(
       res,

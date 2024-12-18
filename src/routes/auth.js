@@ -11,7 +11,7 @@ authRouter.post("/register", validateSchema(registerSchema), authController.regi
 authRouter.get("/verify-account/:token", authController.verifyAccount);
 authRouter.post("/login", validateSchema(loginSchema), authController.loginUser);
 authRouter.post("/forgot-password", validateSchema(forgotPasswordSchema), authController.forgotPassword);
-authRouter.get("/reset-password/:token", validateSchema(resetPasswordSchema), authController.updatePassword);
+authRouter.post("/reset-password/:token", validateSchema(resetPasswordSchema), authController.updatePassword);
 
 module.exports = authRouter;
 
