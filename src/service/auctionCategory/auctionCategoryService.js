@@ -26,4 +26,13 @@ const saveAuctionCategory = async (auctionDetails) => {
   }
 };
 
-module.exports = { saveAuctionCategory };
+const getAllAuctionCategory = async()=>{
+  try {
+    const auctionCategoryList = await AuctionCategory.findAll();
+    return auctionCategoryList;
+  } catch (error) {
+    throw new Error(error.message)
+  }
+}
+
+module.exports = { saveAuctionCategory, getAllAuctionCategory };

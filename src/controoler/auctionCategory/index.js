@@ -27,4 +27,23 @@ const createAuctionCategory = async (req, res) => {
   }
 };
 
-module.exports = {createAuctionCategory}
+const allAuctionCategory = async (req, res) => {
+  try {
+    const result = await auctionCategoryService.getAllAuctionCategory();
+    sendSuccessResponse(
+      res,
+      SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY,
+      result,
+      200
+    );
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      "",
+      500
+    );
+  }
+};
+
+module.exports = { createAuctionCategory, allAuctionCategory };
