@@ -6,6 +6,7 @@ exports.ERROR_MESSAGE = {
   INVALID_EMAIL_PASSWORD: "Invalid email or password",
   USER_NOT_ACTIVE: "Your account is not active",
   USER_NOT_FOUND: "User not found",
+  AUCTION_CATEGORY_EXIST:"Auction category already present"
 };
 
 exports.SUCCESS_MESSAGE = {
@@ -15,4 +16,5 @@ exports.SUCCESS_MESSAGE = {
   USER_LOGIN: "User successfully login",
   FORGOT_EMAIL_SEND: "Send a email for update password",
   PASSWORD_UPDATED: "Password updated successfully",
+  AUCTION_CATEGORY_CREATED: "Auction category created successfully"
 };
