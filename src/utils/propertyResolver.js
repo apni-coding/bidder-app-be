@@ -6,7 +6,8 @@ exports.ERROR_MESSAGE = {
   INVALID_EMAIL_PASSWORD: "Invalid email or password",
   USER_NOT_ACTIVE: "Your account is not active",
   USER_NOT_FOUND: "User not found",
-  AUCTION_CATEGORY_EXIST:"Auction category already present"
+  AUCTION_CATEGORY_EXIST:"Auction category already present",
+  TOKEN_REQUIRED: "Token required",
 };
 
 exports.SUCCESS_MESSAGE = {
