@@ -10,6 +10,11 @@ const {
 
 const createAuctionCategory = async (req, res) => {
   try {
+    const { role_id } = req.user;
+
+    if (role_id === 3) {
+      return sendErrorResponse(res, ERROR_MESSAGE.UNAUTHORIZED_USER, "", 500);
+    }
     const result = await auctionCategoryService.saveAuctionCategory(req.body);
     sendSuccessResponse(
       res,
