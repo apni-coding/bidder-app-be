@@ -56,7 +56,21 @@ const updateAuction = async (req, res) => {
   }
 };
 
+const getActiveAuctions = async(req, res)=>{
+  try {
+    const auctions = await auctionService.getActiveAuctions()
+    sendSuccessResponse(res, SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY, auctions, 200)
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      err.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      500
+    );
+  }
+}
+
 module.exports = {
   createAuction,
   updateAuction,
+  getActiveAuctions
 };
