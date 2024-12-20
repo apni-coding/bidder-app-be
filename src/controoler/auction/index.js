@@ -63,7 +63,7 @@ const getActiveAuctions = async(req, res)=>{
   } catch (error) {
     sendErrorResponse(
       res,
-      err.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
       500
     );
   }
