@@ -1,6 +1,8 @@
 const { Op } = require("sequelize");
 const Auction = require("../../models/auction");
 const { ERROR_MESSAGE } = require("../../utils/propertyResolver");
+const Users = require("../../models/user");
+const AuctionCategory = require("../../models/auctionCategory");
 
 const createAuction = async (auctionData, userId) => {
   try {
@@ -63,6 +65,18 @@ const getActiveAuctions = async () => {
         "images",
         "updated_at",
         "created_at",
+      ],
+      include: [
+        {
+          model: Users,
+          as: "creator",
+          attributes: ["id", "first_name", "last_name", "email", "dob"],
+        },
+        {
+          model: AuctionCategory,
+          as: "category",
+          attributes: ["id", "name", "description", "icon"],
+        },
       ],
       order: [["end_date", "ASC"]], // Order by on end date
     });
