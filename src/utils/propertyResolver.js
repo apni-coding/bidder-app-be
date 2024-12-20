@@ -17,5 +17,6 @@ exports.SUCCESS_MESSAGE = {
   USER_LOGIN: "User successfully login",
   FORGOT_EMAIL_SEND: "Send a email for update password",
   PASSWORD_UPDATED: "Password updated successfully",
-  AUCTION_CATEGORY_CREATED: "Auction category created successfully"
+  AUCTION_CATEGORY_CREATED: "Auction category created successfully",
+  AUCTION_CREATED: "Auction created successfully"
 };

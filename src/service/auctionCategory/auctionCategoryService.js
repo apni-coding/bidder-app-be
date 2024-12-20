@@ -1,7 +1,7 @@
 const AuctionCategory = require("../../models/auctionCategory");
 const { ERROR_MESSAGE } = require("../../utils/propertyResolver");
 
-const saveAuctionCategory = async (auctionDetails) => {
+const saveAuctionCategory = async (auctionDetails, userId) => {
   try {
     const { name } = auctionDetails;
     // find auction category
@@ -18,7 +18,7 @@ const saveAuctionCategory = async (auctionDetails) => {
     // save auction category in db
     const auctionCategoryDetails = await AuctionCategory.create({
       ...auctionDetails,
-      created_by: 1, // need to change
+      created_by: userId, 
     });
     return auctionCategoryDetails;
   } catch (error) {
