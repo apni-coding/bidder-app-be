@@ -8,6 +8,8 @@ exports.ERROR_MESSAGE = {
   USER_NOT_FOUND: "User not found",
   AUCTION_CATEGORY_EXIST:"Auction category already present",
   TOKEN_REQUIRED: "Token required",
+  AUCTION_ID_REQUIRED: "Auction id required",
+  AUCTION_NOT_FOUND: "Auction not found"
 };
 
 exports.SUCCESS_MESSAGE = {
@@ -18,5 +20,6 @@ exports.SUCCESS_MESSAGE = {
   FORGOT_EMAIL_SEND: "Send a email for update password",
   PASSWORD_UPDATED: "Password updated successfully",
   AUCTION_CATEGORY_CREATED: "Auction category created successfully",
-  AUCTION_CREATED: "Auction created successfully"
+  AUCTION_CREATED: "Auction created successfully",
+  AUCTION_UPDATED: "Auction updated successfully"
 };

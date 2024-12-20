@@ -8,5 +8,7 @@ const createAuctionSchema = require("../middlewares/validationSchema/createAucti
 const auctionRouter = express.Router();
 
 auctionRouter.post('/create', validateSchema(createAuctionSchema), authenticateToken, auctionController.createAuction)
+auctionRouter.put('/update/:id', validateSchema(createAuctionSchema), authenticateToken, auctionController.updateAuction)
+
 
 module.exports = auctionRouter;

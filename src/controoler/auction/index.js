@@ -25,6 +25,38 @@ const createAuction = async (req, res) => {
   }
 };
 
+const updateAuction = async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const auctionId = req.params.id;
+
+    if (!auctionId) {
+      throw new Error(ERROR_MESSAGE.AUCTION_ID_REQUIRED);
+    }
+
+    // Call the service to update the auction
+    const updatedAuction = await auctionService.updateAuction(
+      auctionId,
+      userId,
+      req.body
+    );
+
+    sendSuccessResponse(
+      res,
+      SUCCESS_MESSAGE.AUCTION_UPDATED,
+      updatedAuction,
+      200
+    );
+  } catch (err) {
+    sendErrorResponse(
+      res,
+      err.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      500
+    );
+  }
+};
+
 module.exports = {
   createAuction,
+  updateAuction,
 };
