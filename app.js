@@ -7,6 +7,8 @@ const Users = require("./src/models/user");
 const indexRouter = require("./src/routes");
 const AuctionCategory = require("./src/models/auctionCategory");
 const Auction = require("./src/models/auction");
+require('./src/associations');
+
 const app = express();
 
 app.use(express.json());
