@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Auction = require("../../models/auction");
 const { ERROR_MESSAGE } = require("../../utils/propertyResolver");
 
@@ -41,7 +42,38 @@ const updateAuction = async (auctionId, userId, auctionData) => {
   }
 };
 
+const getActiveAuctions = async () => {
+  try {
+    const currentDate = new Date();
+
+    const auctions = await Auction.findAll({
+      where: {
+        status: "active",
+        end_date: {
+          [Op.gt]: currentDate,
+        },
+      },
+      attributes: [
+        "id",
+        "item_name",
+        "base_price",
+        "description",
+        "start_date",
+        "end_date",
+        "images",
+        "updated_at",
+        "created_at",
+      ],
+      order: [["end_date", "ASC"]], // Order by on end date
+    });
+    return auctions;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   createAuction,
   updateAuction,
+  getActiveAuctions,
 };
