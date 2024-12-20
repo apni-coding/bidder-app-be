@@ -56,10 +56,19 @@ const updateAuction = async (req, res) => {
   }
 };
 
-const getActiveAuctions = async(req, res)=>{
+const getActiveAuctions = async (req, res) => {
   try {
-    const auctions = await auctionService.getActiveAuctions()
-    sendSuccessResponse(res, SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY, auctions, 200)
+    const { page, limit } = req.query;
+    const auctions = await auctionService.getActiveAuctions({
+      page: parseInt(page, 10) || 1,
+      limit: parseInt(limit, 10) || 10,
+    });
+    sendSuccessResponse(
+      res,
+      SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY,
+      auctions,
+      200
+    );
   } catch (error) {
     sendErrorResponse(
       res,
@@ -67,10 +76,10 @@ const getActiveAuctions = async(req, res)=>{
       500
     );
   }
-}
+};
 
 module.exports = {
   createAuction,
   updateAuction,
-  getActiveAuctions
+  getActiveAuctions,
 };
