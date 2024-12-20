@@ -44,11 +44,13 @@ const updateAuction = async (auctionId, userId, auctionData) => {
   }
 };
 
-const getActiveAuctions = async () => {
+const getActiveAuctions = async (pagination) => {
   try {
+    const { page = 1, limit = 10 } = pagination;
+    const offset = (page - 1) * limit;
     const currentDate = new Date();
 
-    const auctions = await Auction.findAll({
+    const { rows: auctions, count: total } = await Auction.findAndCountAll({
       where: {
         status: "active",
         end_date: {
@@ -78,9 +80,19 @@ const getActiveAuctions = async () => {
           attributes: ["id", "name", "description", "icon"],
         },
       ],
+      limit,
+      offset,
       order: [["end_date", "ASC"]], // Order by on end date
     });
-    return auctions;
+    return {
+      auctions,
+      pagination: {
+        total, // total record
+        page,
+        limit,
+        totalPage: Math.ceil(total / limit),
+      },
+    };
   } catch (error) {
     throw new Error(error.message);
   }
