@@ -161,9 +161,86 @@ const getAuctionById = async (auctionId) => {
     throw new Error(error.message);
   }
 };
+
+const getMyAuctions = async (filters) => {
+  try {
+    const {
+      page = 1,
+      limit = 10,
+      minPrice,
+      maxPrice,
+      sortBy = "asc",
+      categoryId,
+      status = "active",
+      userId,
+    } = filters;
+    const offset = (page - 1) * limit;
+
+    // Build dynamic filter options
+    const whereClause = {
+      status: status,
+      created_by: userId,
+    };
+
+    if (minPrice) {
+      whereClause.base_price = {
+        [Op.gt]: parseFloat(minPrice),
+      };
+    }
+
+    if (maxPrice) {
+      whereClause.base_price = {
+        ...whereClause.base_price, //[Op.gt]: parseFloat(minPrice)
+        [Op.lte]: parseFloat(maxPrice),
+      };
+    }
+
+    if (categoryId) {
+      whereClause.category_id = categoryId;
+    }
+
+    const { rows: auctions, count: total } = await Auction.findAndCountAll({
+      where: whereClause,
+      attributes: [
+        "id",
+        "item_name",
+        "base_price",
+        "description",
+        "start_date",
+        "end_date",
+        "status",
+        "images",
+        "updated_at",
+        "created_at",
+      ],
+      include: [
+        {
+          model: AuctionCategory,
+          as: "category",
+          attributes: ["id", "name", "description", "icon"],
+        },
+      ],
+      limit,
+      offset,
+      order: [["end_date", sortBy === "asc" ? "ASC" : "DESC"]], // Order by on end date
+    });
+    return {
+      auctions,
+      pagination: {
+        total, // total record
+        page,
+        limit,
+        totalPage: Math.ceil(total / limit),
+      },
+    };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 module.exports = {
   createAuction,
   updateAuction,
   getActiveAuctions,
   getAuctionById,
+  getMyAuctions,
 };

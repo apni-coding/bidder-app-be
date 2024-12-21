@@ -105,9 +105,40 @@ const getAuctionDetailById = async (req, res) => {
   }
 };
 
+const getMyAuctions = async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const { page, limit, minPrice, maxPrice, sortBy, categoryId, status } =
+      req.query;
+    const auctions = await auctionService.getMyAuctions({
+      page: parseInt(page, 10) || 1,
+      limit: parseInt(limit, 10) || 10,
+      minPrice,
+      maxPrice,
+      sortBy,
+      categoryId,
+      status,
+      userId,
+    });
+    sendSuccessResponse(
+      res,
+      SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY,
+      auctions,
+      200
+    );
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      500
+    );
+  }
+};
+
 module.exports = {
   createAuction,
   updateAuction,
   getActiveAuctions,
   getAuctionDetailById,
+  getMyAuctions,
 };
