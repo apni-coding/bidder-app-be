@@ -58,10 +58,14 @@ const updateAuction = async (req, res) => {
 
 const getActiveAuctions = async (req, res) => {
   try {
-    const { page, limit } = req.query;
+    const { page, limit, minPrice, maxPrice, sortBy, categoryId } = req.query;
     const auctions = await auctionService.getActiveAuctions({
       page: parseInt(page, 10) || 1,
       limit: parseInt(limit, 10) || 10,
+      minPrice,
+      maxPrice,
+      sortBy,
+      categoryId,
     });
     sendSuccessResponse(
       res,
