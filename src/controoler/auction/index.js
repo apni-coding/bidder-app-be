@@ -82,8 +82,32 @@ const getActiveAuctions = async (req, res) => {
   }
 };
 
+const getAuctionDetailById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      throw new Error(ERROR_MESSAGE.AUCTION_ID_REQUIRED);
+    }
+    const auctionDetail = await auctionService.getAuctionById(id);
+    sendSuccessResponse(
+      res,
+      SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY,
+      auctionDetail,
+      200
+    );
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      "",
+      500
+    );
+  }
+};
+
 module.exports = {
   createAuction,
   updateAuction,
   getActiveAuctions,
+  getAuctionDetailById,
 };

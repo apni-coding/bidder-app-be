@@ -10,6 +10,8 @@ const auctionRouter = express.Router();
 auctionRouter.post('/create', validateSchema(createAuctionSchema), authenticateToken, auctionController.createAuction)
 auctionRouter.put('/update/:id', validateSchema(createAuctionSchema), authenticateToken, auctionController.updateAuction)
 auctionRouter.get('/', auctionController.getActiveAuctions);
+auctionRouter.get('/auction-detail/:id', auctionController.getAuctionDetailById);
+
 
 
 module.exports = auctionRouter;

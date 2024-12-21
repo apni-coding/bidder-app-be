@@ -125,8 +125,45 @@ const getActiveAuctions = async (filters) => {
   }
 };
 
+const getAuctionById = async (auctionId) => {
+  try {
+    const auction = await Auction.findOne({
+      where: {
+        id: auctionId,
+      },
+      attributes: [
+        "id",
+        "item_name",
+        "base_price",
+        "status",
+        "description",
+        "start_date",
+        "end_date",
+        "images",
+        "updated_at",
+        "created_at",
+      ],
+      include: [
+        {
+          model: Users,
+          as: "creator",
+          attributes: ["id", "first_name", "last_name", "email", "dob"],
+        },
+        {
+          model: AuctionCategory,
+          as: "category",
+          attributes: ["id", "name", "description", "icon"],
+        },
+      ],
+    });
+    return auction;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 module.exports = {
   createAuction,
   updateAuction,
   getActiveAuctions,
+  getAuctionById,
 };
