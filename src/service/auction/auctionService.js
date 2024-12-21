@@ -44,19 +44,46 @@ const updateAuction = async (auctionId, userId, auctionData) => {
   }
 };
 
-const getActiveAuctions = async (pagination) => {
+const getActiveAuctions = async (filters) => {
   try {
-    const { page = 1, limit = 10 } = pagination;
+    const {
+      page = 1,
+      limit = 10,
+      minPrice,
+      maxPrice,
+      sortBy = "asc",
+      categoryId,
+    } = filters;
     const offset = (page - 1) * limit;
     const currentDate = new Date();
 
-    const { rows: auctions, count: total } = await Auction.findAndCountAll({
-      where: {
-        status: "active",
-        end_date: {
-          [Op.gt]: currentDate,
-        },
+    // Build dynamic filter options
+    const whereClause = {
+      status: "active",
+      end_date: {
+        [Op.gt]: currentDate,
       },
+    };
+
+    if (minPrice) {
+      whereClause.base_price = {
+        [Op.gt]: parseFloat(minPrice),
+      };
+    }
+
+    if (maxPrice) {
+      whereClause.base_price = {
+        ...whereClause.base_price, //[Op.gt]: parseFloat(minPrice)
+        [Op.lte]: parseFloat(maxPrice),
+      };
+    }
+
+    if (categoryId) {
+      whereClause.category_id = categoryId;
+    }
+
+    const { rows: auctions, count: total } = await Auction.findAndCountAll({
+      where: whereClause,
       attributes: [
         "id",
         "item_name",
@@ -82,7 +109,7 @@ const getActiveAuctions = async (pagination) => {
       ],
       limit,
       offset,
-      order: [["end_date", "ASC"]], // Order by on end date
+      order: [["end_date", sortBy === "asc" ? "ASC" : "DESC"]], // Order by on end date
     });
     return {
       auctions,
