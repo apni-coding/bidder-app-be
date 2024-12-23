@@ -2,11 +2,8 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const sequelize = require("./src/config/dbConnect");
-const Roles = require("./src/models/role");
-const Users = require("./src/models/user");
 const indexRouter = require("./src/routes");
-const AuctionCategory = require("./src/models/auctionCategory");
-const Auction = require("./src/models/auction");
+const { tableSync } = require("./src/utils/commonMethod");
 require('./src/associations');
 
 const app = express();
@@ -23,10 +20,7 @@ app.listen(PORT, async () => {
     // db connection
     await sequelize.authenticate();
     console.log('Db Connection has been established successfully.');
-    await Roles.sync({ force: false });
-    await Users.sync({force: false});
-    await AuctionCategory.sync({force: false});
-    await Auction.sync({force: false});
+    await tableSync()
   } catch (error) {
     console.log("Error", error.message);
   }
