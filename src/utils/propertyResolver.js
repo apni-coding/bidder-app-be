@@ -9,7 +9,10 @@ exports.ERROR_MESSAGE = {
   AUCTION_CATEGORY_EXIST:"Auction category already present",
   TOKEN_REQUIRED: "Token required",
   AUCTION_ID_REQUIRED: "Auction id required",
-  AUCTION_NOT_FOUND: "Auction not found"
+  AUCTION_NOT_FOUND: "Auction not found",
+  CANNOT_BID_OWN_AUCTION: "You cannot bid on your own auction",
+  BID_AMT_LESS: "Bid amount always grater than base amount",
+  BID_ALREADY_APPLIED: "Bid already applied"
 };
 
 exports.SUCCESS_MESSAGE = {
@@ -21,5 +24,6 @@ exports.SUCCESS_MESSAGE = {
   PASSWORD_UPDATED: "Password updated successfully",
   AUCTION_CATEGORY_CREATED: "Auction category created successfully",
   AUCTION_CREATED: "Auction created successfully",
-  AUCTION_UPDATED: "Auction updated successfully"
+  AUCTION_UPDATED: "Auction updated successfully",
+  BID_CREATE: "Bid created successfully"
 };
