@@ -135,10 +135,32 @@ const getMyAuctions = async (req, res) => {
   }
 };
 
+const deleteAuction = async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const auctionId = req.params.id;
+
+    if (!auctionId) {
+      throw new Error(ERROR_MESSAGE.AUCTION_ID_REQUIRED);
+    }
+
+    const result = await auctionService.deleteAuction(auctionId, userId);
+
+    sendSuccessResponse(res, SUCCESS_MESSAGE.AUCTION_DELETED, result, 200);
+  } catch (err) {
+    sendErrorResponse(
+      res,
+      err.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      500
+    );
+  }
+};
+
 module.exports = {
   createAuction,
   updateAuction,
   getActiveAuctions,
   getAuctionDetailById,
   getMyAuctions,
+  deleteAuction
 };

@@ -237,10 +237,36 @@ const getMyAuctions = async (filters) => {
     throw new Error(error.message);
   }
 };
+
+const deleteAuction = async (auctionId, userId) => {
+  try {
+    // Find the auction by Id and ensure the user is the creator
+    const auction = await Auction.findOne({
+      where: {
+        id: auctionId,
+        created_by: userId,
+      },
+    });
+
+    // Auction not found
+    if (!auction) {
+      throw new Error(ERROR_MESSAGE.AUCTION_NOT_FOUND);
+    }
+
+    // Soft delete by setting deleted_by
+    auction.deleted_by = userId;
+    await auction.save();
+    await auction.destroy(); // soft delete
+    return auction;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 module.exports = {
   createAuction,
   updateAuction,
   getActiveAuctions,
   getAuctionById,
   getMyAuctions,
+  deleteAuction
 };
