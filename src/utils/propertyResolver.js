@@ -27,5 +27,7 @@ exports.SUCCESS_MESSAGE = {
   AUCTION_CREATED: "Auction created successfully",
   AUCTION_UPDATED: "Auction updated successfully",
   BID_CREATE: "Bid created successfully",
-  PRESIGNED_GENERATED: "Presigned url generated successfully"
+  PRESIGNED_GENERATED: "Presigned url generated successfully",
+  AUCTION_DELETED: "Auction deleted successfully",
+
 };
