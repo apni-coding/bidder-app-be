@@ -11,7 +11,7 @@ auctionRouter.post('/create', validateSchema(createAuctionSchema), authenticateT
 auctionRouter.put('/update/:id', validateSchema(createAuctionSchema), authenticateToken, auctionController.updateAuction)
 auctionRouter.get('/', auctionController.getActiveAuctions);
 auctionRouter.get('/auction-detail/:id', auctionController.getAuctionDetailById);
-auctionRouter.get('/my-auction', authenticateToken, auctionController.getMyAuctions );
+auctionRouter.post('/my-auction', authenticateToken, auctionController.getMyAuctions );
 auctionRouter.delete('/delete/:id', authenticateToken, auctionController.deleteAuction);
 
 
