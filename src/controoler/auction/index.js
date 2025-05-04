@@ -108,8 +108,18 @@ const getAuctionDetailById = async (req, res) => {
 const getMyAuctions = async (req, res) => {
   try {
     const { id: userId } = req.user;
-    const { page, limit, minPrice, maxPrice, sortBy, categoryId, status } =
-      req.query;
+    const {
+      page,
+      limit,
+      minPrice,
+      maxPrice,
+      sortBy,
+      categoryId,
+      status,
+      startDate,
+      endDate,
+      search,
+    } = req.body;
     const auctions = await auctionService.getMyAuctions({
       page: parseInt(page, 10) || 1,
       limit: parseInt(limit, 10) || 10,
@@ -118,6 +128,9 @@ const getMyAuctions = async (req, res) => {
       sortBy,
       categoryId,
       status,
+      startDate,
+      endDate,
+      search,
       userId,
     });
     sendSuccessResponse(
@@ -162,5 +175,5 @@ module.exports = {
   getActiveAuctions,
   getAuctionDetailById,
   getMyAuctions,
-  deleteAuction
+  deleteAuction,
 };

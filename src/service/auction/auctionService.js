@@ -171,16 +171,51 @@ const getMyAuctions = async (filters) => {
       maxPrice,
       sortBy = "asc",
       categoryId,
-      status = "active",
+      status,
+      startDate,
+      endDate,
+      search,
       userId,
     } = filters;
     const offset = (page - 1) * limit;
 
     // Build dynamic filter options
     const whereClause = {
-      status: status,
       created_by: userId,
     };
+
+    // Filter by multiple status
+    if (Array.isArray(status) && status.length > 0) {
+      whereClause.status = { [Op.in]: status };
+    }
+
+    // Filter by multiple categories
+    if (Array.isArray(categoryId) && categoryId.length > 0) {
+      whereClause.category_id = { [Op.in]: categoryId.map(Number) };
+    }
+
+    // Filter by the item search
+    if (search) {
+      whereClause.item_name = { [Op.like]: `%${search}%` };
+    }
+
+    // Filter by start date or end date
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
+      whereClause.start_date = { [Op.gte]: start };
+      whereClause.end_date = { [Op.lte]: end };
+    } else if (startDate && !endDate) {
+      const start = new Date(startDate);
+      start.setHours(0, 0, 0, 0);
+      whereClause.start_date = { [Op.gte]: start };
+    } else if (endDate && !startDate) {
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
+      whereClause.end_date = { [Op.lte]: end };
+    }
 
     if (minPrice) {
       whereClause.base_price = {
@@ -194,10 +229,7 @@ const getMyAuctions = async (filters) => {
         [Op.lte]: parseFloat(maxPrice),
       };
     }
-
-    if (categoryId) {
-      whereClause.category_id = categoryId;
-    }
+    console.log("@@@@@@ ", whereClause);
 
     const { rows: auctions, count: total } = await Auction.findAndCountAll({
       where: whereClause,
@@ -268,5 +300,5 @@ module.exports = {
   getActiveAuctions,
   getAuctionById,
   getMyAuctions,
-  deleteAuction
+  deleteAuction,
 };
