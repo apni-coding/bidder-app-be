@@ -76,10 +76,42 @@ const myBidList = async (filter) => {
     //Auction Filter
     const auctionWhere = {};
 
+    //Search Filter
+    if (search) {
+      auctionWhere[Op.or] = [
+        {
+          item_name: { [Op.like]: `%${search}%` },
+        },
+        {
+          description: { [Op.like]: `%${search}%` },
+        },
+      ];
+    }
+
     //Bid Filter
     const bidWhere = {
       user_id: userId,
     };
+
+    // Min bid amount filter
+    if (minBidAmount) {
+      bidWhere.bid_amount = {
+        [Op.gte]: parseFloat(minBidAmount),
+      };
+    }
+
+    // Max bid amount filter
+    if (maxBidAmount) {
+      bidWhere.bid_amount = {
+        ...bidWhere.bid_amount,
+        [Op.lte]: parseFloat(maxBidAmount),
+      };
+    }
+
+    // Filter by multiple status
+    if (Array.isArray(status) && status.length > 0) {
+      bidWhere.bid_status = { [Op.in]: status };
+    }
 
     const { rows: auctions, count: total } = await Auction.findAndCountAll({
       where: auctionWhere,
@@ -93,12 +125,12 @@ const myBidList = async (filter) => {
         {
           model: Users,
           as: "creator",
-          attributes:["id", "first_name", "last_name", "email"]
-        }
+          attributes: ["id", "first_name", "last_name", "email"],
+        },
       ],
       limit,
       offset,
-      order: [[sortBy, "DESC"]]
+      order: [["created_at", sortBy === "asc" ? "ASC" : "DESC"]],
     });
 
     return {
