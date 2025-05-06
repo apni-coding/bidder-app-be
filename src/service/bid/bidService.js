@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const Auction = require("../../models/auction");
 const { ERROR_MESSAGE } = require("../../utils/propertyResolver");
 const Bid = require("../../models/bid");
+const Users = require("../../models/user");
 
 const saveBid = async (bidInfo) => {
   try {
@@ -58,4 +59,60 @@ const saveBid = async (bidInfo) => {
   }
 };
 
-module.exports = { saveBid };
+const myBidList = async (filter) => {
+  try {
+    const {
+      page,
+      limit,
+      sortBy = "desc",
+      minBidAmount,
+      maxBidAmount,
+      status,
+      search,
+      userId,
+    } = filter;
+    const offset = (page - 1) * limit;
+
+    //Auction Filter
+    const auctionWhere = {};
+
+    //Bid Filter
+    const bidWhere = {
+      user_id: userId,
+    };
+
+    const { rows: auctions, count: total } = await Auction.findAndCountAll({
+      where: auctionWhere,
+      include: [
+        {
+          model: Bid,
+          where: bidWhere,
+          as: "bids",
+          required: true, // Ensure only auction where user has bid are return
+        },
+        {
+          model: Users,
+          as: "creator",
+          attributes:["id", "first_name", "last_name", "email"]
+        }
+      ],
+      limit,
+      offset,
+      order: [[sortBy, "DESC"]]
+    });
+
+    return {
+      auctions,
+      pagination: {
+        total, // total record
+        page,
+        limit,
+        totalPage: Math.ceil(total / limit),
+      },
+    };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+module.exports = { saveBid, myBidList };

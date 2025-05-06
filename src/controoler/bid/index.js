@@ -10,7 +10,7 @@ const {
 
 const createBid = async (req, res) => {
   try {
-    const {id:userId} = req.user;
+    const { id: userId } = req.user;
     const result = await bidService.saveBid({ userId, ...req.body });
     sendSuccessResponse(res, SUCCESS_MESSAGE.BID_CREATE, result, 200);
   } catch (error) {
@@ -22,4 +22,34 @@ const createBid = async (req, res) => {
   }
 };
 
-module.exports = { createBid };
+const myBidList = async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const { page, limit, sortBy, minBidAmount, maxBidAmount, status, search } =
+      req.body;
+    const result = await bidService.myBidList({
+      page: parseInt(page, 10) || 1,
+      limit: parseInt(limit, 10) || 10,
+      sortBy,
+      minBidAmount,
+      maxBidAmount,
+      status,
+      search,
+      userId
+    });
+    sendSuccessResponse(
+      res,
+      SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY,
+      result,
+      200
+    );
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      500
+    );
+  }
+};
+
+module.exports = { createBid, myBidList };

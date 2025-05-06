@@ -1,5 +1,6 @@
 const Auction = require("./models/auction");
 const AuctionCategory = require("./models/auctionCategory");
+const Bid = require("./models/bid");
 const Roles = require("./models/role");
 const Users = require("./models/user");
 
@@ -17,3 +18,11 @@ Auction.belongsTo(AuctionCategory, {
   foreignKey: "category_id",
   as: "category",
 });
+
+// Auction and bid (One to many)
+Auction.hasMany(Bid, { foreignKey: "auction_id", as: "bids" });
+Bid.belongsTo(Auction, { foreignKey: "auction_id", as: "auction" });
+
+// User and bid (One to many)
+Users.hasMany(Bid, { foreignKey: "user_id", as: "bids" });
+Bid.belongsTo(Users, { foreignKey: "user_id", as: "bidder" });
