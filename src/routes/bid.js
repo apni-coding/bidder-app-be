@@ -7,6 +7,7 @@ const createBidSchema = require("../middlewares/validationSchema/createBidSchema
 const bidRouter = express.Router();
 
 bidRouter.post('/create', validateSchema(createBidSchema), authenticateToken, bidController.createBid)
+bidRouter.post('/my-bid', authenticateToken, bidController.myBidList );
 
 
 

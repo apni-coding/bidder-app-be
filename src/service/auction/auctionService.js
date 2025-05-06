@@ -169,7 +169,7 @@ const getMyAuctions = async (filters) => {
       limit = 10,
       minPrice,
       maxPrice,
-      sortBy = "asc",
+      sortBy = "desc",
       categoryId,
       status,
       startDate,
