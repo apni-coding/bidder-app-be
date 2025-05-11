@@ -6,14 +6,15 @@ exports.ERROR_MESSAGE = {
   INVALID_EMAIL_PASSWORD: "Invalid email or password",
   USER_NOT_ACTIVE: "Your account is not active",
   USER_NOT_FOUND: "User not found",
-  AUCTION_CATEGORY_EXIST:"Auction category already present",
+  AUCTION_CATEGORY_EXIST: "Auction category already present",
   TOKEN_REQUIRED: "Token required",
   AUCTION_ID_REQUIRED: "Auction id required",
   AUCTION_NOT_FOUND: "Auction not found",
   CANNOT_BID_OWN_AUCTION: "You cannot bid on your own auction",
   BID_AMT_LESS: "Bid amount always grater than base amount",
   BID_ALREADY_APPLIED: "Bid already applied",
-  PRESIGNED_GENERATED: "Unable to generated presigned url"
+  PRESIGNED_GENERATED: "Unable to generated presigned url",
+  
 };
 
 exports.SUCCESS_MESSAGE = {
@@ -29,5 +30,11 @@ exports.SUCCESS_MESSAGE = {
   BID_CREATE: "Bid created successfully",
   PRESIGNED_GENERATED: "Presigned url generated successfully",
   AUCTION_DELETED: "Auction deleted successfully",
+  AUCTION_STATUS: "Auction status updated"
+};
 
+exports.ROLE_ID = {
+  SUPER_ADMIN: 1,
+  ADMIN: 2,
+  USER: 3,
 };
