@@ -12,5 +12,10 @@ adminRouter.post(
   authenticateToken,
   auctionController.updateAuctionStatus
 );
+adminRouter.post(
+  "/auctions",
+  authenticateToken,
+  auctionController.getAuctionList
+);
 
 module.exports = adminRouter;
