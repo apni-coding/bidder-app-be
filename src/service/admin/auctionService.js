@@ -1,4 +1,4 @@
-const { fn, col, literal } = require("sequelize");
+const { fn, col, literal, Op } = require("sequelize");
 const Auction = require("../../models/auction");
 const { ERROR_MESSAGE } = require("../../utils/propertyResolver");
 const AuctionCategory = require("../../models/auctionCategory");
