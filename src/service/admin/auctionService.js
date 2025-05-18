@@ -109,6 +109,7 @@ const getAuctionList = async (filters) => {
         "start_date",
         "end_date",
         "status",
+        "rejected_reason",
         "images",
         "updated_at",
         "created_at",
