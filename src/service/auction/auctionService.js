@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 const Auction = require("../../models/auction");
-const { ERROR_MESSAGE } = require("../../utils/propertyResolver");
+const { ERROR_MESSAGE, ROLE_ID } = require("../../utils/propertyResolver");
 const Users = require("../../models/user");
 const AuctionCategory = require("../../models/auctionCategory");
 
@@ -270,14 +270,18 @@ const getMyAuctions = async (filters) => {
   }
 };
 
-const deleteAuction = async (auctionId, userId) => {
+const deleteAuction = async (auctionId, userId, role_id) => {
   try {
+    const whereClause = {
+      id: auctionId,
+    };
+    if (![ROLE_ID.SUPER_ADMIN, ROLE_ID.ADMIN].includes(role_id)) {
+      whereClause.created_by = userId;
+    }
+
     // Find the auction by Id and ensure the user is the creator
     const auction = await Auction.findOne({
-      where: {
-        id: auctionId,
-        created_by: userId,
-      },
+      where: whereClause,
     });
 
     // Auction not found
