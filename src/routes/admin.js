@@ -1,5 +1,6 @@
 const express = require("express");
 const auctionController = require("../controoler/admin/auctionControoler");
+const userController = require("../controoler/admin/userControoler");
 const authenticateToken = require("../middlewares/authMiddleware");
 const validateSchema = require("../middlewares/validator");
 const updateAuctionStatusSchema = require("../middlewares/validationSchema/updateAuctionStatusSchema");
@@ -17,5 +18,6 @@ adminRouter.post(
   authenticateToken,
   auctionController.getAuctionList
 );
+adminRouter.post("/user-list", authenticateToken, userController.getUserList);
 
 module.exports = adminRouter;
