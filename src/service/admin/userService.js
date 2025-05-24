@@ -32,7 +32,7 @@ const getUserList = async (filters, role_id) => {
 
     if (role_ids.length > 0 && !whereClause.role_id) {
       whereClause.role_id = {
-        [Op.in]: roleIdsArray,
+        [Op.in]: role_ids,
       };
     }
 
