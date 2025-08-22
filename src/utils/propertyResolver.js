@@ -30,7 +30,9 @@ exports.SUCCESS_MESSAGE = {
   BID_CREATE: "Bid created successfully",
   PRESIGNED_GENERATED: "Presigned url generated successfully",
   AUCTION_DELETED: "Auction deleted successfully",
-  AUCTION_STATUS: "Auction status updated"
+  AUCTION_STATUS: "Auction status updated",
+  DATA_UPDATED_SUCCESSFULLY: "Data Updated Successfully",
+  DATA_DELETED_SUCCESSFULLY:"Data Deleted Successfully"
 };
 
 exports.ROLE_ID = {
