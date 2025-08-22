@@ -11,7 +11,7 @@ const {
 const getLoginUserDetail = async (req, res) => {
   try {
     const { id: userId } = req.user;
-    const result = await userService.findUserById( userId );
+    const result = await userService.findUserById(userId);
     sendSuccessResponse(
       res,
       SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY,
@@ -27,4 +27,23 @@ const getLoginUserDetail = async (req, res) => {
   }
 };
 
-module.exports = { getLoginUserDetail };
+const getUserDetailById = async (req, res) => {
+  try {
+    const { id: userId } = req.params;
+    const result = await userService.findUserById(userId);
+    sendSuccessResponse(
+      res,
+      SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY,
+      result,
+      200
+    );
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      500
+    );
+  }
+};
+
+module.exports = { getLoginUserDetail, getUserDetailById };
