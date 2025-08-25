@@ -98,6 +98,18 @@ const getAuctionList = async (filters) => {
       col: "Auction.id",
     });
 
+    if (total <= 0) {
+      return {
+        auctions: {},
+        pagination: {
+          total: 0, // total record
+          page,
+          limit,
+          totalPage: Math.ceil(total / limit),
+        },
+      };
+    }
+
     // Step 2: Fetch data with group
     const auctions = await Auction.findAll({
       where: whereClause,

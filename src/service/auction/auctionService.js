@@ -1,8 +1,9 @@
-const { Op } = require("sequelize");
+const { Op, fn, col } = require("sequelize");
 const Auction = require("../../models/auction");
 const { ERROR_MESSAGE, ROLE_ID } = require("../../utils/propertyResolver");
 const Users = require("../../models/user");
 const AuctionCategory = require("../../models/auctionCategory");
+const Bid = require("../../models/bid");
 
 const createAuction = async (auctionData, userId) => {
   try {
@@ -229,9 +230,26 @@ const getMyAuctions = async (filters) => {
         [Op.lte]: parseFloat(maxPrice),
       };
     }
-    console.log("@@@@@@ ", whereClause);
+    // Step 1: Count without group
+    const total = await Auction.count({
+      where: whereClause,
+      distinct: true,
+      col: "Auction.id",
+    });
 
-    const { rows: auctions, count: total } = await Auction.findAndCountAll({
+    if (total <= 0) {
+      return {
+        auctions: {},
+        pagination: {
+          total: 0, // total record
+          page,
+          limit,
+          totalPage: Math.ceil(total / limit),
+        },
+      };
+    }
+
+    const auctions = await Auction.findAll({
       where: whereClause,
       attributes: [
         "id",
@@ -244,6 +262,7 @@ const getMyAuctions = async (filters) => {
         "images",
         "updated_at",
         "created_at",
+        [fn("COUNT", col("bids.id")), "totalBids"],
       ],
       include: [
         {
@@ -251,10 +270,18 @@ const getMyAuctions = async (filters) => {
           as: "category",
           attributes: ["id", "name", "description", "icon"],
         },
+        {
+          model: Bid,
+          as: "bids",
+          attributes: [],
+          required: false,
+        },
       ],
+      group: ["Auction.id", "category.id"],
       limit,
       offset,
       order: [["end_date", sortBy === "asc" ? "ASC" : "DESC"]], // Order by on end date
+      subQuery: false,
     });
     return {
       auctions,
