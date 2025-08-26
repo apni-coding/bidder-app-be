@@ -52,4 +52,26 @@ const myBidList = async (req, res) => {
   }
 };
 
-module.exports = { createBid, myBidList };
+const bidListOnAuction = async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const auction_id = req.params.auction_id;
+    if(!auction_id){
+      throw new Error(ERROR_MESSAGE.AUCTION_ID_REQUIRED)
+    }
+    const result = await bidService.bidListByAuctionId(auction_id, userId);
+    sendSuccessResponse(
+      res,
+      SUCCESS_MESSAGE.DATA_FETCH_SUCCESSFULLY,
+      result,
+      200
+    );
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      500
+    );
+  }
+};
+module.exports = { createBid, myBidList, bidListOnAuction };
