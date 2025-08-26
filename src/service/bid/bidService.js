@@ -147,4 +147,42 @@ const myBidList = async (filter) => {
   }
 };
 
-module.exports = { saveBid, myBidList };
+
+const bidListByAuctionId = async (auction_id, userId) => {
+  try {
+      //fetch auction detail
+      const auction = await Auction.findOne({
+        where:{
+          id: auction_id,
+          created_by: userId
+        }
+      });
+
+      if(!auction){
+        throw new Error(ERROR_MESSAGE.AUCTION_NOT_FOUND)
+      }
+
+      //fetch all bids for this auction
+      const bids = await Bid.findAll({
+        where:{
+          auction_id
+        },
+        include:[
+          {
+            model: Users,
+            as:"bidder",
+            attributes:["id", "first_name", "last_name", "email"]
+          }
+        ],
+        order:[["bid_amount", 'DESC']] //highest bid first
+      })
+      return{
+        auction,
+        bids
+      }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+module.exports = { saveBid, myBidList, bidListByAuctionId };
