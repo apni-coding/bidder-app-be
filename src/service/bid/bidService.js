@@ -147,42 +147,84 @@ const myBidList = async (filter) => {
   }
 };
 
-
 const bidListByAuctionId = async (auction_id, userId) => {
   try {
-      //fetch auction detail
-      const auction = await Auction.findOne({
-        where:{
-          id: auction_id,
-          created_by: userId
-        }
-      });
+    //fetch auction detail
+    const auction = await Auction.findOne({
+      where: {
+        id: auction_id,
+        created_by: userId,
+      },
+    });
 
-      if(!auction){
-        throw new Error(ERROR_MESSAGE.AUCTION_NOT_FOUND)
-      }
+    if (!auction) {
+      throw new Error(ERROR_MESSAGE.AUCTION_NOT_FOUND);
+    }
 
-      //fetch all bids for this auction
-      const bids = await Bid.findAll({
-        where:{
-          auction_id
+    //fetch all bids for this auction
+    const bids = await Bid.findAll({
+      where: {
+        auction_id,
+      },
+      include: [
+        {
+          model: Users,
+          as: "bidder",
+          attributes: ["id", "first_name", "last_name", "email"],
         },
-        include:[
-          {
-            model: Users,
-            as:"bidder",
-            attributes:["id", "first_name", "last_name", "email"]
-          }
-        ],
-        order:[["bid_amount", 'DESC']] //highest bid first
-      })
-      return{
-        auction,
-        bids
-      }
+      ],
+      order: [["bid_amount", "DESC"]], //highest bid first
+    });
+    return {
+      auction,
+      bids,
+    };
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
-module.exports = { saveBid, myBidList, bidListByAuctionId };
+const approveBid = async (bidId, userId) => {
+  try {
+    const bidInfo = await Bid.findOne({
+      where: {
+        id: bidId,
+        bid_status: "pending",
+      },
+    });
+    if (!bidInfo) {
+      throw new Error(ERROR_MESSAGE.BID_NOT_FOUND);
+    }
+
+    const auctionInfo = await Auction.findOne({
+      where: {
+        id: bidInfo.auction_id,
+        created_by: userId,
+        status: "active",
+      },
+    });
+    if (!auctionInfo) {
+      throw new Error(ERROR_MESSAGE.AUCTION_NOT_FOUND);
+    }
+    //Mark bid as approved
+    bidInfo.bid_status = "accepted";
+    await bidInfo.save();
+    auctionInfo.status = "completed";
+    await auctionInfo.save();
+
+    //update all other bids in one query (set rejected)
+    await Bid.update(
+      { bid_status: "rejected" },
+      {
+        where: {
+          auction_id: bidInfo.auction_id,
+          id: { [Op.ne]: bidId },
+        },
+      }
+    );
+    return bidId;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+module.exports = { saveBid, myBidList, bidListByAuctionId, approveBid };
