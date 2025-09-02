@@ -14,6 +14,8 @@ exports.ERROR_MESSAGE = {
   BID_AMT_LESS: "Bid amount always grater than base amount",
   BID_ALREADY_APPLIED: "Bid already applied",
   PRESIGNED_GENERATED: "Unable to generated presigned url",
+  BID_ID_REQUIRED:"Bid id required",
+  BID_NOT_FOUND:"Bid not found"
   
 };
 
@@ -32,7 +34,8 @@ exports.SUCCESS_MESSAGE = {
   AUCTION_DELETED: "Auction deleted successfully",
   AUCTION_STATUS: "Auction status updated",
   DATA_UPDATED_SUCCESSFULLY: "Data Updated Successfully",
-  DATA_DELETED_SUCCESSFULLY:"Data Deleted Successfully"
+  DATA_DELETED_SUCCESSFULLY:"Data Deleted Successfully",
+  BID_UPDATED:"Bid updated successfully"
 };
 
 exports.ROLE_ID = {

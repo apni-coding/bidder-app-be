@@ -74,4 +74,27 @@ const bidListOnAuction = async (req, res) => {
     );
   }
 };
-module.exports = { createBid, myBidList, bidListOnAuction };
+
+const approveBid = async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const bidId = req.params.bid_id;
+    if(!bidId){
+      throw new Error(ERROR_MESSAGE.BID_ID_REQUIRED)
+    }
+    const result = await bidService.approveBid(bidId, userId);
+    sendSuccessResponse(
+      res,
+      SUCCESS_MESSAGE.BID_UPDATED,
+      result,
+      200
+    );
+  } catch (error) {
+    sendErrorResponse(
+      res,
+      error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+      500
+    );
+  }
+};
+module.exports = { createBid, myBidList, bidListOnAuction, approveBid };
